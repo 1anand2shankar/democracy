@@ -7,7 +7,7 @@ An intelligent, AI-powered civic education web application designed to guide Ind
 ## ✨ Key Features
 
 - **Interactive Step Guide:** Locked-step progression through the entire election cycle — registration, verification, voting, and result tracking — ensuring users never skip critical prerequisites.
-- **AI Election Assistant (Google Gemini):** Context-aware conversational assistant powered by Google Gemini 2.5 Flash with function calling. Answers voter questions, checks eligibility, and provides guidance under 150 words.
+- **AI Election Assistant (Google Gemini):** Context-aware conversational assistant powered by Google Gemini 1.5 Flash with function calling. Answers voter questions, checks eligibility, and provides guidance under 150 words.
 - **Semantic FAQ Search (Vertex AI):** Uses Google Vertex AI `text-embedding-004` model to find the most relevant FAQ answer through cosine similarity matching.
 - **Multi-Language Support (Cloud Translation):** Translates election guidance into 8 Indian regional languages (Hindi, Tamil, Telugu, Kannada, Bengali, Marathi, Gujarati, Malayalam) via Google Cloud Translation API v2.
 - **Polling Booth Locator (Google Maps):** Integrated Google Maps Platform for searching polling booths, district election offices, and voter registration centres.

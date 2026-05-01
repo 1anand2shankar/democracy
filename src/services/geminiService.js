@@ -27,7 +27,7 @@ export async function askGemini(conversationHistory, userMessage) {
     throw new Error('Gemini request failed: API key is missing');
   }
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
   const systemInstruction = "You are a neutral, factual election education assistant for DemocrAI. Help users understand voter registration, voting steps, election timelines, ballot counting, candidate selection, and general civics. Keep all answers clear, unbiased, beginner-friendly, and under 150 words. If a question is unrelated to elections or civics, politely redirect the user.";
 

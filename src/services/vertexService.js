@@ -82,6 +82,10 @@ export function keywordFallback(query) {
   return bestScore >= 0.2 ? bestMatch : null;
 }
 
+// Module-level cache to store question embeddings once fetched.
+// This ensures that we only call the embedding API for the corpus once per session.
+const faqEmbeddingsCache = new Map();
+
 /**
  * Finds the most relevant FAQ for the user's query using semantic search.
  * Uses Vertex AI embeddings when available, keyword fallback otherwise.
@@ -108,7 +112,7 @@ export async function findRelevantFaq(query) {
     const apiKey = import.meta.env.VITE_VERTEX_API_KEY;
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${apiKey}`;
 
-    // Embed the query
+    // Embed the user query
     const queryResult = await client.post(endpoint, {
       content: { parts: [{ text: sanitized }] },
     });
@@ -119,16 +123,28 @@ export async function findRelevantFaq(query) {
 
     const queryEmbedding = queryResult.data.embedding.values;
 
-    // Embed all FAQ questions and find best match
+    // Compare against FAQ corpus
     let bestMatch = null;
     let bestScore = 0;
 
     for (const faq of FAQ_CORPUS) {
-      const faqResult = await client.post(endpoint, {
-        content: { parts: [{ text: faq.question }] },
-      });
-      if (faqResult.ok && faqResult.data?.embedding?.values) {
-        const sim = cosineSimilarity(queryEmbedding, faqResult.data.embedding.values);
+      let faqEmbedding = faqEmbeddingsCache.get(faq.id);
+
+      // Fetch embedding for the FAQ question if not already cached
+      if (!faqEmbedding) {
+        const faqResult = await client.post(endpoint, {
+          content: { parts: [{ text: faq.question }] },
+        });
+
+        if (faqResult.ok && faqResult.data?.embedding?.values) {
+          faqEmbedding = faqResult.data.embedding.values;
+          faqEmbeddingsCache.set(faq.id, faqEmbedding);
+        }
+      }
+
+      // If we have an embedding (from cache or new fetch), calculate similarity
+      if (faqEmbedding) {
+        const sim = cosineSimilarity(queryEmbedding, faqEmbedding);
         if (sim > bestScore) {
           bestScore = sim;
           bestMatch = { question: faq.question, answer: faq.answer, score: sim };

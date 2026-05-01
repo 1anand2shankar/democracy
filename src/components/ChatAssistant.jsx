@@ -258,7 +258,7 @@ export default function ChatAssistant() {
               <h2 id="chat-heading" className="text-[11px] font-bold text-[#111111] uppercase tracking-[0.18em] leading-none">
                 DemocrAI Assistant
               </h2>
-              <p className="text-[9px] text-[#888] mt-0.5 tracking-wide">Powered by Gemini 2.5 Flash</p>
+              <p className="text-[9px] text-[#888] mt-0.5 tracking-wide">Powered by Gemini 1.5 Flash</p>
             </div>
           </div>
 
